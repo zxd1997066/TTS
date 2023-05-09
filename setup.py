@@ -92,9 +92,9 @@ setup(
     },
     install_requires=[
         "scipy>=0.19.0",
-        "torch>=0.4.1",
-        "numpy==1.15.4",
-        "librosa==0.6.2",
+        # "torch>=0.4.1",
+        "numpy>=1.19.2",
+        "librosa==0.8.0",
         "unidecode==0.4.20",
         "attrdict",
         "tensorboardX",

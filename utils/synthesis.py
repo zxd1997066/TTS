@@ -45,9 +45,9 @@ def run_model(model, inputs, CONFIG, truncated, speaker_id=None, style_mel=None)
 
 
 def parse_outputs(postnet_output, decoder_output, alignments):
-    postnet_output = postnet_output[0].data.cpu().numpy()
-    decoder_output = decoder_output[0].data.cpu().numpy()
-    alignment = alignments[0].cpu().data.numpy()
+    postnet_output = postnet_output[0].float().data.cpu().numpy()
+    decoder_output = decoder_output[0].float().data.cpu().numpy()
+    alignment = alignments[0].float().cpu().data.numpy()
     return postnet_output, decoder_output, alignment
 
 
@@ -137,4 +137,4 @@ def synthesis(model,
         # trim silence
         if do_trim_silence:
             wav = trim_silence(wav, ap)
-    return wav, alignment, decoder_output, postnet_output, stop_tokens
+    return wav, alignment, decoder_output, postnet_output, stop_tokens, inputs.size()
