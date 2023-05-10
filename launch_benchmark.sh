@@ -20,6 +20,7 @@ function prepare_workload {
     pip uninstall -y TTS
     python setup.py clean
     python setup.py install
+    pip install libtool
     
     if [ $(espeak-ng --help > /dev/null 2>&1 && echo $? || echo $?) -ne 0 ];then
         wget -q -O 1.51.tar.gz https://github.com/espeak-ng/espeak-ng/archive/refs/tags/1.51.tar.gz
