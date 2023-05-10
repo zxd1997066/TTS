@@ -15,7 +15,7 @@ function prepare_workload {
     pip uninstall -y numba llvmlite
     conda install -c numba llvmdev -y
     pip install git+https://github.com/numba/llvmlite.git
-    pip install -U numba==0.48
+    pip install -U numba
 
     pip uninstall -y TTS
     python setup.py clean
