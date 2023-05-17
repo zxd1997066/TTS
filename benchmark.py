@@ -172,6 +172,31 @@ def run_inference(args, test_sentences, model, config, use_cuda, ap, speaker_id)
                         table_res = prof.key_averages().table(sort_by="cpu_time_total")
                         print(table_res)
                         # save_profile_result(timeline_dir + torch.backends.quantized.engine + "_result_average.xlsx", table_res)
+        elif args.precision == "float16":
+            with torch.cpu.amp.autocast(enabled=True, dtype=torch.half):
+                for i, sentence in enumerate(test_sentences):
+                    if args.perf_num_iters != 0 and i >= args.perf_num_iters:
+                        break
+                    # write_progress_bar(i, num_sentences, avg_throughput, avg_latency)
+                    throughput_s, latency_ms, prof = tts(args, model, sentence, config, use_cuda, ap, speaker_id, figures=True)
+                    print("Iteration: {}, inference time: {} sec.".format(i, latency_ms/1000), flush=True)
+                    if i < args.perf_num_warmup:
+                        continue
+                    batch_time_list.append(latency_ms)
+                    throughputs.append(throughput_s)
+                    latencies.append(latency_ms)
+                    if i == int(args.perf_num_iters/2) and args.profile:
+                        import pathlib
+                        timeline_dir = str(pathlib.Path.cwd()) + '/timeline/'
+                        if not os.path.exists(timeline_dir):
+                            os.makedirs(timeline_dir)
+                        timeline_file = timeline_dir + 'timeline-' + str(torch.backends.quantized.engine) + '-' + \
+                                    "tts" + str(i) + '-' + str(os.getpid()) + '.json'
+                        print(timeline_file)
+                        prof.export_chrome_trace(timeline_file)
+                        table_res = prof.key_averages().table(sort_by="cpu_time_total")
+                        print(table_res)
+                        # save_profile_result(timeline_dir + torch.backends.quantized.engine + "_result_average.xlsx", table_res)
         else:
             for i, sentence in enumerate(test_sentences):
                 if args.perf_num_iters != 0 and i >= args.perf_num_iters:
