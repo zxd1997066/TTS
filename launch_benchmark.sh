@@ -49,7 +49,7 @@ function main {
     for model_name in ${model_name_list[@]}
     do
         # pre run
-        python benchmark.py --model-path ${CKPT_DIR}/tacotron2/best_model.pth.tar --config-path=${CKPT_DIR}/tacotron2/config.json \
+        python benchmark.py --model-path ${CKPT_DIR}/best_model.pth.tar --config-path=${CKPT_DIR}/config.json \
             --dataset-name=ljspeech --metadata-path=${DATASET_DIR}/ljspeech/truncated_metadata.csv \
             --perf-num-warmup 1 --perf-num-iters 2  --batch-size 1 \
             --precision ${precision} --channels_last ${channels_last} || true
