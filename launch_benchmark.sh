@@ -50,7 +50,7 @@ function main {
     do
         # pre run
         python benchmark.py --model-path ${CKPT_DIR}/best_model.pth.tar --config-path=${CKPT_DIR}/config.json \
-            --dataset-name=ljspeech --metadata-path=${DATASET_DIR}/ljspeech/truncated_metadata.csv \
+            --dataset-name=ljspeech --metadata-path=${DATASET_DIR}/truncated_metadata.csv \
             --perf-num-warmup 1 --perf-num-iters 2  --batch-size 1 \
             --precision ${precision} --channels_last ${channels_last} || true
         #
@@ -92,7 +92,7 @@ function generate_core {
         printf " ${OOB_EXEC_HEADER} \
             python benchmark.py --model-path ${CKPT_DIR}/best_model.pth.tar \
                 --config-path=${CKPT_DIR}/config.json --dataset-name=ljspeech \
-                --metadata-path=${DATASET_DIR}/ljspeech/truncated_metadata.csv \
+                --metadata-path=${DATASET_DIR}/truncated_metadata.csv \
                 --perf-num-warmup ${num_warmup} --perf-num-iters ${num_iter} \
                 --batch-size ${batch_size} \
                 --precision ${precision} \
@@ -122,7 +122,7 @@ function generate_core_launcher {
                     --ncore_per_instance ${real_cores_per_instance} \
             benchmark.py --model-path ${CKPT_DIR}/best_model.pth.tar \
                 --config-path=${CKPT_DIR}/config.json --dataset-name=ljspeech \
-                --metadata-path=${DATASET_DIR}/ljspeech/truncated_metadata.csv \
+                --metadata-path=${DATASET_DIR}/truncated_metadata.csv \
                 --perf-num-warmup ${num_warmup} --perf-num-iters ${num_iter} \
                 --batch-size ${batch_size} \
                 --precision ${precision} \
