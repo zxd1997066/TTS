@@ -90,8 +90,8 @@ function generate_core {
             OOB_EXEC_HEADER=" CUDA_VISIBLE_DEVICES=${device_array[i]} "
         fi
         printf " ${OOB_EXEC_HEADER} \
-            python benchmark.py --model-path ${CKPT_DIR}/tacotron2/best_model.pth.tar \
-                --config-path=${CKPT_DIR}/tacotron2/config.json --dataset-name=ljspeech \
+            python benchmark.py --model-path ${CKPT_DIR}/best_model.pth.tar \
+                --config-path=${CKPT_DIR}/config.json --dataset-name=ljspeech \
                 --metadata-path=${DATASET_DIR}/ljspeech/truncated_metadata.csv \
                 --perf-num-warmup ${num_warmup} --perf-num-iters ${num_iter} \
                 --batch-size ${batch_size} \
@@ -120,8 +120,8 @@ function generate_core_launcher {
                     --log_path ${log_dir} \
                     --ninstances ${#cpu_array[@]} \
                     --ncore_per_instance ${real_cores_per_instance} \
-            benchmark.py --model-path ${CKPT_DIR}/tacotron2/best_model.pth.tar \
-                --config-path=${CKPT_DIR}/tacotron2/config.json --dataset-name=ljspeech \
+            benchmark.py --model-path ${CKPT_DIR}/best_model.pth.tar \
+                --config-path=${CKPT_DIR}/config.json --dataset-name=ljspeech \
                 --metadata-path=${DATASET_DIR}/ljspeech/truncated_metadata.csv \
                 --perf-num-warmup ${num_warmup} --perf-num-iters ${num_iter} \
                 --batch-size ${batch_size} \
