@@ -100,6 +100,10 @@ def parse_args(args=None, namespace=None):
                         help='use channels last format')
     parser.add_argument('--profile', action='store_true',
                         help='Trigger profile on current topology.')
+    parser.add_argument("--compile", action='store_true', default=False,
+                    help="enable torch.compile")
+    parser.add_argument("--backend", type=str, default='inductor',
+                    help="enable torch.compile backend")
     args = parser.parse_args()
     return args
 
@@ -133,6 +137,8 @@ def load_model(config, speakers, model_path):
     # load the model
     model.load_state_dict(cp['model'])
     model.eval()
+    if args.compile:
+        model = torch.compile(model, backend=args.backend, options={"freezing": True})
     # set model stepsize
     if 'r' in cp:
         model.decoder.set_r(cp['r'])
