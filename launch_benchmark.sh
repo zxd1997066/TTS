@@ -52,7 +52,7 @@ function main {
         python benchmark.py --model-path ${CKPT_DIR}/best_model.pth.tar --config-path=${CKPT_DIR}/config.json \
             --dataset-name=ljspeech --metadata-path=${DATASET_DIR}/truncated_metadata.csv \
             --perf-num-warmup 1 --perf-num-iters 2  --batch-size 1 \
-            --precision ${precision} --channels_last ${channels_last} || true
+            --precision ${precision} --channels_last ${channels_last} ${addtion_options} || true
         #
         for batch_size in ${batch_size_list[@]}
         do
