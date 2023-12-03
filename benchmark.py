@@ -60,6 +60,9 @@ def main():
         model = model_oob
         print("---- Use channels last format.")
 
+    if args.compile:
+        model = torch.compile(model, backend=args.backend, options={"freezing": True})
+
     if args.ipex:
         import intel_extension_for_pytorch as ipex
         if args.precision == "bfloat16":
@@ -137,8 +140,7 @@ def load_model(config, speakers, model_path):
     # load the model
     model.load_state_dict(cp['model'])
     model.eval()
-    if args.compile:
-        model = torch.compile(model, backend=args.backend, options={"freezing": True})
+    
     # set model stepsize
     if 'r' in cp:
         model.decoder.set_r(cp['r'])
