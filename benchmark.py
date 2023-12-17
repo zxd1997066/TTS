@@ -156,7 +156,7 @@ def run_inference(args, test_sentences, model, config, use_cuda, ap, speaker_id)
     batch_time_list = []
     with torch.no_grad():
         if args.precision == "bfloat16":
-            with torch.cpu.amp.autocast(enabled=True, dtype=torch.bfloat16):
+            with torch.autocast(device_type="cuda" if torch.cuda.is_available() else "cpu", enabled=True, dtype=torch.bfloat16):
                 for i, sentence in enumerate(test_sentences):
                     if args.perf_num_iters != 0 and i >= args.perf_num_iters:
                         break
@@ -181,7 +181,7 @@ def run_inference(args, test_sentences, model, config, use_cuda, ap, speaker_id)
                         print(table_res)
                         # save_profile_result(timeline_dir + torch.backends.quantized.engine + "_result_average.xlsx", table_res)
         elif args.precision == "float16":
-            with torch.cpu.amp.autocast(enabled=True, dtype=torch.half):
+            with torch.autocast(device_type="cuda" if torch.cuda.is_available() else "cpu", enabled=True, dtype=torch.half):
                 for i, sentence in enumerate(test_sentences):
                     if args.perf_num_iters != 0 and i >= args.perf_num_iters:
                         break
