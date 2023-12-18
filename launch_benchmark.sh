@@ -13,8 +13,10 @@ function prepare_workload {
 
     pip install -r ${workload_dir}/requirements.txt
     pip uninstall -y numba llvmlite
-    conda install -c numba llvmdev -y
-    pip install git+https://github.com/numba/llvmlite.git
+    if [ "${device}" != "cuda" ];then
+        conda install -c numba llvmdev -y
+        pip install git+https://github.com/numba/llvmlite.git
+    fi
     pip install -U numba
 
     pip uninstall -y TTS
