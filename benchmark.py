@@ -43,7 +43,7 @@ def main():
     dataset_name = args.dataset_name
     metadata_path = args.metadata_path
     test_sentences = load_test_sentences(dataset_name, metadata_path)
-    use_cuda = False
+    use_cuda = True if torch.cuda.is_available() else False
     # Set some config fields manually for testing
     config.use_forward_attn = True
     # Use only one speaker
@@ -52,7 +52,7 @@ def main():
     # load the audio processor
     ap = AudioProcessor(**config.audio)
     # Load TTS model
-    model = load_model(config, speakers, model_path)
+    model = load_model(config, speakers, model_path, use_cuda)
     # Run inference
     if args.channels_last:
         model_oob = model
@@ -129,7 +129,7 @@ def get_ljspeech_data(raw_data):
     data = [row[2] for row in reader]
     return data
 
-def load_model(config, speakers, model_path):
+def load_model(config, speakers, model_path, use_cuda):
     # Only one speaker
     speakers = []
     # load the model
@@ -139,6 +139,8 @@ def load_model(config, speakers, model_path):
     cp = torch.load(model_path, map_location=lambda storage, loc: storage)
     # load the model
     model.load_state_dict(cp['model'])
+    if use_cuda:
+        model = model.cuda()
     model.eval()
     
     # set model stepsize
