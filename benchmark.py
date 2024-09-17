@@ -158,6 +158,7 @@ def run_inference(args, test_sentences, model, config, use_cuda, ap, speaker_id)
     avg_throughput = 0
     avg_latency = 0
     batch_time_list = []
+    import torch
     if args.triton_cpu:
         print("run with triton cpu backend")
         import torch._inductor.config
